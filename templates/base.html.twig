@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}App Tuteur{% endblock %}</title>
+
+    {# Inclusion du fichier CSS via la fonction asset() #}
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
+    {% block stylesheets %}{% endblock %}
+</head>
+
+<body>
+    {# Barre de navigation simple #}
+    <nav class="navbar">
+        <div class="logo">
+            <a href="/">AppTuteur</a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="{{ path('list_tuteurs_route') }}">Tuteurs</a></li>
+            <li><a href="#">Étudiants</a></li>
+            <li><a href="{{ path('app_sujets') }}">Sujets</a></li>
+        </ul>
+    </nav>
+
+    {# Contenu principal #}
+    <main class="container">
+        {% block body %}{% endblock %}
+    </main>
+
+    {% block javascripts %}{% endblock %}
+</body>
+</html>
+

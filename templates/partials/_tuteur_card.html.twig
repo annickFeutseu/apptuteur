@@ -1,0 +1,10 @@
+<div class="tuteur-card" style="border:1px solid #ccc; padding:10px; margin-bottom:20px;">
+    <h3>{{ tuteur.prenom }} {{ tuteur.nom }}</h3>
+    <p><strong>Entreprise :</strong> {{ tuteur.entreprise|default('—') }}</p>
+    <p><strong>Email :</strong> <a href="mailto:{{ tuteur.email }}">{{ tuteur.email }}</a></p>
+    <p><strong>Téléphone :</strong> {{ tuteur.telephone }}</p>
+
+    {% block extra_action %}
+        <!-- Bloc facultatif pour un bouton (bonus embed) -->
+    {% endblock %}
+</div>

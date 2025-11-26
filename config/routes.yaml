@@ -1,0 +1,64 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+
+# Route simple
+# route_name:
+#     path: /mon-url
+#     controller: App\Controller\MonController::maMethode
+#     methods: [GET]
+
+# Route avec paramètre
+calcul_route:
+    path: /calcul/{a}
+    controller: App\Controller\MainController::indexter
+    methods: [GET]
+    requirements:
+        # a: '\d+'
+        a: "[1-9][0-9]?|100"
+
+hello_route:
+    path: /hello/{prenom}
+    controller: App\Controller\FormController::hello
+    methods: [GET]
+    requirements:
+        prenom: "[A-Za-z]+"
+
+list_tuteur_route:
+    path: /tuteurs/{prenom}
+    controller: App\Controller\FormController::hello
+    methods: [GET]
+    requirements:
+        prenom: "[A-Za-z]+"
+
+list_tuteurs_route:
+    path: /tuteurs
+    controller: App\Controller\TuteurController::index
+    methods: [GET]
+
+search_tutor_route:
+    path: /search_tuteur
+    controller: App\Controller\FormController::search
+    methods: [GET]
+
+post_search_tutor_route:
+    path: /search_tuteur/post
+    controller: App\Controller\FormController::verify
+    methods: [POST]
+
+students_route:
+    path: /students
+    controller: App\Controller\StudentController::students
+    methods: [GET]
+
+app_tuteur_show:
+    path: /tuteurs/{id}
+    controller: App\Controller\TuteurController::show
+    methods: [GET]
+    
+app_sujets:
+    path: /sujets
+    controller: App\Controller\TuteurController::sujets
+    methods: [GET]

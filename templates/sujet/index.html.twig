@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sujets de stage{% endblock %}
+
+{% block body %}
+<h1>Sujets de stage</h1>
+
+<form method="get" style="margin-bottom:10px;">
+    <label>Filtrer par entreprise :</label>
+    <select name="entreprise" onchange="this.form.submit()">
+        <option value="">Toutes</option>
+        {% for t in tuteurs %}
+            <option value="{{ t.entreprise }}" {{ t.entreprise == entreprise ? 'selected' : '' }}>
+                {{ t.entreprise }}
+            </option>
+        {% endfor %}
+    </select>
+</form>
+
+<ul>
+    {% for s in sujets %}
+        <li>
+            <strong>{{ s.sujet }}</strong>
+            — par {{ s.etudiant }} (encadré par {{ s.tuteur }}, {{ s.entreprise }})
+        </li>
+    {% else %}
+        <p><em>Aucun sujet trouvé pour cette entreprise.</em></p>
+    {% endfor %}
+</ul>
+{% endblock %}

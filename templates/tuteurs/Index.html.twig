@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Tuteurs{% endblock %}
+
+{% block body %}
+<h1>Liste des Tuteurs</h1>
+
+<table border="1" cellspacing="0" cellpadding="6">
+    <thead>
+        <tr>
+            <th>
+                {% set newOrder = app.request.get('order') == 'asc' ? 'desc' : 'asc' %}
+                <a href="{{ path(app.request.attributes.get('_route'), app.request.query.all | merge({ sort: 'nom', order: newOrder })) }}">
+                    Nom
+                    {% if app.request.get('sort') == 'nom' %}
+                        {% if app.request.get('order') == 'asc' %}
+                            🔼
+                        {% else %}
+                            🔽
+                        {% endif %}
+                    {% endif %}
+                </a>
+            </th>
+
+
+            <th>{{ 'Prénom'|upper }}</th>
+            <th>{{ 'Entreprise'|upper }}</th>
+            <th>{{ 'Email'|upper }}</th>
+            <th>{{ 'Téléphone'|upper }}</th>
+            <th># Étudiants</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for t in tuteurs %}
+        <tr>
+            <td>{{ t.nom }}</td>
+            <td>{{ t.prenom }}</td>
+            <td>{{ t.entreprise|default('—') }}</td>
+            <td><a href="mailto:{{ t.email }}">{{ t.email }}</a></td>
+            <td>{{ t.telephone }}</td>
+            <td>{{ t.etudiants|length }}</td>
+            <td><a href="{{ path('app_tuteur_show', { id: t.id }) }}">Voir</a></td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="7">Aucun tuteur</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

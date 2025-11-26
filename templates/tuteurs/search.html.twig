@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Recherche-tuteur{% endblock %}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+        
+        <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
+        {% block stylesheets %}
+        {% endblock %}
+
+        {% block javascripts %}
+        {% endblock %}
+    </head>
+    <body>
+        {# ici nous avons le formulaire de recherche d'un tuteur ansi que les resultats de la recherche #}
+        <h1>Recherche de tuteur</h1>
+        <form action="/search_tuteur/post" method="post">
+            <label for="nom">Nom :</label>
+            <input type="text" id="nom" name="query" required>
+            <button type="submit" class="btn-primary">Rechercher</button>
+        </form>
+        {% if results is defined %}
+            <h2>Résultats de la recherche de : {{ query }}</h2>
+            <ul>
+                {% for tut in results %}
+                    <li>{{ tut.nom }} {{ tut.prenom }} - {{ tut.age }}</li>
+                {% else %}
+                    <li>Aucun tuteur trouvé.</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </body>
+</html>

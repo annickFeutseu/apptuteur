@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des tuteurs{% endblock %}
+
+{% block body %}
+    <h1>Liste des tuteurs</h1>
+
+    <ul>
+        {% for tut in tuteurs %}
+            <li>{{ tut.nom }} {{ tut.prenom }} - {{ tut.age }} ans</li>
+        {% else %}
+            <li>Aucun tuteur disponible.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
