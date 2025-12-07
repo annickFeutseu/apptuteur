@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\TuteurRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TuteurRepository::class)]
@@ -29,6 +31,17 @@ class Tuteur
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $telephone = null;
+
+    /**
+     * @var Collection<int, Etudiant>
+     */
+    #[ORM\OneToMany(targetEntity: Etudiant::class, mappedBy: 'tuteur')]
+    private Collection $etudiants;
+
+    public function __construct()
+    {
+        $this->etudiants = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -91,6 +104,36 @@ class Tuteur
     public function setTelephone(?string $telephone): static
     {
         $this->telephone = $telephone;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Etudiant>
+     */
+    public function getEtudiants(): Collection
+    {
+        return $this->etudiants;
+    }
+
+    public function addEtudiant(Etudiant $etudiant): static
+    {
+        if (!$this->etudiants->contains($etudiant)) {
+            $this->etudiants->add($etudiant);
+            $etudiant->setTuteur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEtudiant(Etudiant $etudiant): static
+    {
+        if ($this->etudiants->removeElement($etudiant)) {
+            // set the owning side to null (unless already changed)
+            if ($etudiant->getTuteur() === $this) {
+                $etudiant->setTuteur(null);
+            }
+        }
 
         return $this;
     }
