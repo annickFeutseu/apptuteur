@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="mb-4">{{ mode == 'edit' ? 'Modifier' : 'Ajouter' }} un étudiant</h2>
+
+            {{ form_start(form) }}
+
+                {# Inclure les champs via le partial #}
+                {% include 'partials/etudiant/_fields.html.twig' %}
+
+                <button type="submit" class="btn btn-primary mt-2">
+                    {{ mode == 'edit' ? 'Mettre à jour' : 'Enregistrer' }}
+                </button>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

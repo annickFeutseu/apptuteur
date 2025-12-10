@@ -31,10 +31,9 @@ class Visite
     #[Assert\NotBlank]
     private ?\DateTimeImmutable $date = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 255)]
     #[Assert\Length(
-        min: 10,
-        max: 500,
+        min: 5,
         minMessage: 'Le commentaire doit contenir au moins {{ limit }} caractères.',
         maxMessage: 'Le commentaire ne peut pas dépasser {{ limit }} caractères.'
     )]

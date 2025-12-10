@@ -83,3 +83,40 @@ app_dashboard:
     path: /dashboard
     controller: App\Controller\DashboardController::index
     methods: [GET]
+
+student_add:
+    path: /students/add
+    controller: App\Controller\EtudiantController::add
+    methods: [GET, POST]
+
+student_edit:
+    path: /students/edit/{id}
+    controller: App\Controller\EtudiantController::edit
+    methods: [GET, POST]
+
+# for visites
+etudiant_visites:
+    path: /students/{id}/visites
+    controller: App\Controller\VisiteController::visites
+    methods: [GET]
+
+visite_add:
+    path: /students/{id}/visites/new
+    controller: App\Controller\VisiteController::add
+    methods: [GET, POST]
+
+visite_edit:
+    path: /visites/{id}/edit
+    controller: App\Controller\VisiteController::edit
+    methods: [GET, POST]
+
+visite_compte_rendu:
+    path: /visites/{id}/compte-rendu
+    controller: App\Controller\VisiteController::compteRendu
+    methods: [GET, POST]
+
+visite_compte_rendu_pdf:
+    path: /visites/{id}/compte-rendu/pdf
+    controller: App\Controller\VisiteController::exportPdf
+    methods: [GET, POST]
+

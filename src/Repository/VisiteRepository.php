@@ -16,6 +16,23 @@ class VisiteRepository extends ServiceEntityRepository
         parent::__construct($registry, Visite::class);
     }
 
+    public function findByTuteurAndStatutSorted($tuteur, ?string $statut = null, ?string $order = 'ASC')
+    {
+        $qb = $this->createQueryBuilder('v')
+            ->where('v.tuteur = :tuteur')
+            ->setParameter('tuteur', $tuteur);
+
+        if ($statut && $statut !== 'Toutes') {
+            $qb->andWhere('v.statut = :statut')
+            ->setParameter('statut', $statut);
+        }
+
+        $qb->orderBy('v.date', $order);
+
+        return $qb->getQuery()->getResult();
+    }
+
+
     //    /**
     //     * @return Visite[] Returns an array of Visite objects
     //     */

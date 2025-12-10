@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2>{{ mode == 'edit' ? 'Modifier' : 'Ajouter' }} une visite pour {{ etudiant.prenom }} {{ etudiant.nom }}</h2>
+
+    {{ form_start(
+        form,
+        mode == 'edit'
+            ? { action: path('visite_edit', { id: visite.id }) }
+            : { action: path('visite_add',  { id: etudiant.id }) }
+    ) }}
+        {% include 'partials/visite/_fields.html.twig' with { etudiant: etudiant } %}
+        <button type="submit" class="btn btn-primary mt-2">
+            {{ mode == 'edit' ? 'Mettre à jour' : 'Enregistrer' }}
+        </button>
+    {{ form_end(form) }}
+</div>
+{% endblock %}

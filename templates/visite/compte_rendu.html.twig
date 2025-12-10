@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2>Compte-rendu de la visite</h2>
+    <p><strong>Étudiant :</strong> {{ visite.etudiant.prenom }} {{ visite.etudiant.nom }}</p>
+    <p><strong>Date :</strong> {{ visite.date|date('d/m/Y H:i') }}</p>
+    <p><strong>Commentaire initial :</strong> {{ visite.commentaire }}</p>
+    <p><strong>Statut :</strong> {{ visite.statut }}</p>
+
+    {{ form_start(form) }}
+        {{ form_row(form.compteRendu) }}
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+    {{ form_end(form) }}
+
+    <a href="{{ path('visite_compte_rendu_pdf', {'id': visite.id}) }}" class="btn btn-secondary mt-3">
+        Exporter en PDF
+    </a>
+</div>
+{% endblock %}

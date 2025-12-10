@@ -21,7 +21,7 @@ final class Version20251210121531 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE visite ADD compte_rendu LONGTEXT DEFAULT NULL, ADD statut VARCHAR(255) NOT NULL, ADD etudiant_id INT DEFAULT NULL, CHANGE date date DATETIME DEFAULT NULL');
-        $this->addSql('ALTER TABLE visite ADD CONSTRAINT FK_B09C8CBBDDEAB1A3 FOREIGN KEY (etudiant_id) REFERENCES tuteur (id)');
+        $this->addSql('ALTER TABLE visite ADD CONSTRAINT FK_B09C8CBBDDEAB1A3 FOREIGN KEY (etudiant_id) REFERENCES etudiant (id)');
         $this->addSql('CREATE INDEX IDX_B09C8CBBDDEAB1A3 ON visite (etudiant_id)');
     }
 
@@ -29,6 +29,7 @@ final class Version20251210121531 extends AbstractMigration
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE visite DROP FOREIGN KEY FK_B09C8CBBDDEAB1A3');
+        $this->addSql('DROP INDEX IDX_VISITE_ETUDIANT ON visite');
         $this->addSql('DROP INDEX IDX_B09C8CBBDDEAB1A3 ON visite');
         $this->addSql('ALTER TABLE visite DROP compte_rendu, DROP statut, DROP etudiant_id, CHANGE date date DATE DEFAULT NULL');
     }

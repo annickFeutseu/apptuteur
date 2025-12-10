@@ -1,0 +1,12 @@
+<form method="GET" class="d-flex mb-3">
+    <select name="statut" class="form-select me-2">
+        <option value="Toutes" {% if statut == 'Toutes' %}selected{% endif %}>Toutes</option>
+        <option value="prévue" {% if statut == 'prévue' %}selected{% endif %}>Prévue</option>
+        <option value="réalisée" {% if statut == 'réalisée' %}selected{% endif %}>Réalisée</option>
+        <option value="annulée" {% if statut == 'annulée' %}selected{% endif %}>Annulée</option>
+    </select>
+    <button type="submit" class="btn btn-primary">Filtrer</button>
+</form>
+
+<a href="{{ path('etudiant_visites', {'id': etudiant.id, 'order':'ASC'}) }}">Trier ↑</a> |
+<a href="{{ path('etudiant_visites', {'id': etudiant.id, 'order':'DESC'}) }}">Trier ↓</a>
