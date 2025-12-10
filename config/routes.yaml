@@ -4,13 +4,9 @@ controllers:
         namespace: App\Controller
     type: attribute
 
-# Route simple
-# route_name:
-#     path: /mon-url
-#     controller: App\Controller\MonController::maMethode
-#     methods: [GET]
-
-# Route avec paramètre
+# ----------------------------------------------------------------
+# Routes pour les exercices d'entraînement avant le projet  
+# ----------------------------------------------------------------
 calcul_route:
     path: /calcul/{a}
     controller: App\Controller\MainController::indexter
@@ -62,6 +58,10 @@ app_sujets:
     path: /sujets
     controller: App\Controller\TuteurController::sujets
     methods: [GET]
+
+# ----------------------------------------------------------------
+# Routes pour l'application de gestion des tuteurs et étudiants
+# ----------------------------------------------------------------
 
 # for auth
 app_login:

@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+// cette classe ne concerne pas le projet, elle sert juste d'entrainement, c'est le resultat des TP avant le projet
 class TuteurController extends AbstractController
 {
     #[Route('/tuteurs', name: 'app_tuteurs')]
