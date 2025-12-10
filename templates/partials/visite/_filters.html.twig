@@ -1,12 +1,62 @@
-<form method="GET" class="d-flex mb-3">
-    <select name="statut" class="form-select me-2">
-        <option value="Toutes" {% if statut == 'Toutes' %}selected{% endif %}>Toutes</option>
-        <option value="prévue" {% if statut == 'prévue' %}selected{% endif %}>Prévue</option>
-        <option value="réalisée" {% if statut == 'réalisée' %}selected{% endif %}>Réalisée</option>
-        <option value="annulée" {% if statut == 'annulée' %}selected{% endif %}>Annulée</option>
-    </select>
-    <button type="submit" class="btn btn-primary">Filtrer</button>
-</form>
+<div class="card shadow-sm border-0 mb-3">
+    <div class="card-body">
+        <div class="row g-3 align-items-end">
+            <!-- Filtres par statut -->
+            <div class="col-md-6">
+                <form method="GET" id="filterForm">
+                    <label class="form-label fw-semibold small text-muted">
+                        <i class="bi bi-funnel me-1"></i>Filtrer par statut
+                    </label>
+                    <div class="d-flex gap-2">
+                        <select name="statut" class="form-select" onchange="this.form.submit()">
+                            <option value="Toutes" {% if statut == 'Toutes' %}selected{% endif %}>
+                                📋 Toutes les visites
+                            </option>
+                            <option value="prévue" {% if statut == 'prévue' %}selected{% endif %}>
+                                ⏰ Prévues
+                            </option>
+                            <option value="réalisée" {% if statut == 'réalisée' %}selected{% endif %}>
+                                ✅ Réalisées
+                            </option>
+                            <option value="annulée" {% if statut == 'annulée' %}selected{% endif %}>
+                                ❌ Annulées
+                            </option>
+                        </select>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
 
-<a href="{{ path('etudiant_visites', {'id': etudiant.id, 'order':'ASC'}) }}">Trier ↑</a> |
-<a href="{{ path('etudiant_visites', {'id': etudiant.id, 'order':'DESC'}) }}">Trier ↓</a>
+            <!-- Tri par date -->
+            <div class="col-md-6">
+                <label class="form-label fw-semibold small text-muted">
+                    <i class="bi bi-sort-down me-1"></i>Trier par date
+                </label>
+                <div class="btn-group w-100" role="group">
+                    <a href="{{ path('etudiant_visites', {'id': etudiant.id, 'order':'ASC', 'statut': statut}) }}" 
+                       class="btn btn-outline-secondary {% if app.request.get('order') == 'ASC' %}active{% endif %}">
+                        <i class="bi bi-sort-up me-1"></i>Plus anciennes
+                    </a>
+                    <a href="{{ path('etudiant_visites', {'id': etudiant.id, 'order':'DESC', 'statut': statut}) }}" 
+                       class="btn btn-outline-secondary {% if app.request.get('order') == 'DESC' or not app.request.get('order') %}active{% endif %}">
+                        <i class="bi bi-sort-down me-1"></i>Plus récentes
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Badges de filtres actifs -->
+        {% if statut != 'Toutes' %}
+            <div class="mt-3">
+                <span class="badge bg-light text-dark border me-2">
+                    Filtre actif : <strong>{{ statut }}</strong>
+                    <a href="{{ path('etudiant_visites', {'id': etudiant.id}) }}" class="text-dark ms-1">
+                        <i class="bi bi-x-circle"></i>
+                    </a>
+                </span>
+            </div>
+        {% endif %}
+    </div>
+</div>

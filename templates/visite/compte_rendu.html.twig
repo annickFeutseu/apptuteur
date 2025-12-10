@@ -1,20 +1,147 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div class="container mt-5">
-    <h2>Compte-rendu de la visite</h2>
-    <p><strong>Étudiant :</strong> {{ visite.etudiant.prenom }} {{ visite.etudiant.nom }}</p>
-    <p><strong>Date :</strong> {{ visite.date|date('d/m/Y H:i') }}</p>
-    <p><strong>Commentaire initial :</strong> {{ visite.commentaire }}</p>
-    <p><strong>Statut :</strong> {{ visite.statut }}</p>
+<div class="container my-5">
+    
+    {# Breadcrumb #}
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('app_dashboard') }}" class="text-decoration-none">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('etudiant_visites', {'id': visite.etudiant.id}) }}" class="text-decoration-none">Visites</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Compte-rendu</li>
+        </ol>
+    </nav>
 
-    {{ form_start(form) }}
-        {{ form_row(form.compteRendu) }}
-        <button type="submit" class="btn btn-primary">Enregistrer</button>
-    {{ form_end(form) }}
+    {# En-tête avec export #}
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="fw-bold mb-2">
+                <i class="bi bi-file-text text-primary me-2"></i>
+                Compte-rendu de visite
+            </h1>
+            <p class="text-muted">Complétez le compte-rendu de cette visite</p>
+        </div>
+        <div class="col-auto align-self-end">
+            <a href="{{ path('visite_compte_rendu_pdf', {'id': visite.id}) }}" class="btn btn-outline-danger">
+                <i class="bi bi-file-pdf me-2"></i>Exporter en PDF
+            </a>
+        </div>
+    </div>
 
-    <a href="{{ path('visite_compte_rendu_pdf', {'id': visite.id}) }}" class="btn btn-secondary mt-3">
-        Exporter en PDF
-    </a>
+    <div class="row">
+        {# Informations de la visite #}
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">
+                        <i class="bi bi-info-circle text-primary me-2"></i>
+                        Informations
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="text-muted small d-block mb-1">
+                            <i class="bi bi-person me-1"></i>Étudiant
+                        </label>
+                        <p class="fw-semibold mb-0">{{ visite.etudiant.prenom }} {{ visite.etudiant.nom }}</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="text-muted small d-block mb-1">
+                            <i class="bi bi-calendar3 me-1"></i>Date et heure
+                        </label>
+                        <p class="fw-semibold mb-0">{{ visite.date|date('d/m/Y') }}</p>
+                        <small class="text-muted">{{ visite.date|date('H:i') }}</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="text-muted small d-block mb-1">
+                            <i class="bi bi-check-circle me-1"></i>Statut
+                        </label>
+                        <span class="badge 
+                            {% if visite.statut == 'prevue' %}bg-warning text-dark{% endif %}
+                            {% if visite.statut == 'realisee' %}bg-success{% endif %}
+                            {% if visite.statut == 'annulee' %}bg-danger{% endif %}">
+                            {{ visite.statut|capitalize }}
+                        </span>
+                    </div>
+
+                    {% if visite.commentaire %}
+                        <div>
+                            <label class="text-muted small d-block mb-1">
+                                <i class="bi bi-chat-left-text me-1"></i>Commentaire initial
+                            </label>
+                            <div class="alert alert-light mb-0 small">
+                                {{ visite.commentaire }}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        {# Formulaire du compte-rendu #}
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-pencil-square me-2"></i>
+                        Rédiger le compte-rendu
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    {{ form_start(form) }}
+                        
+                        <div class="mb-4">
+                            {{ form_label(form.compteRendu, null, {
+                                'label_attr': {'class': 'form-label fw-semibold'}
+                            }) }}
+                            {{ form_widget(form.compteRendu, {
+                                'attr': {
+                                    'class': 'form-control form-control-lg',
+                                    'rows': 10,
+                                    'placeholder': 'Décrivez le déroulement de la visite, les points abordés, les difficultés rencontrées, les progrès constatés...'
+                                }
+                            }) }}
+                            {{ form_errors(form.compteRendu) }}
+                            <small class="text-muted">
+                                <i class="bi bi-lightbulb me-1"></i>
+                                Soyez précis et détaillé pour faciliter le suivi de l'étudiant
+                            </small>
+                        </div>
+
+                        <hr class="my-4">
+
+                        {# Boutons d'action #}
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{{ path('etudiant_visites', {'id': visite.etudiant.id}) }}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>Retour aux visites
+                            </a>
+                            <div>
+                                <button type="submit" name="action" value="finalize" class="btn btn-success">
+                                    <i class="bi bi-check-circle me-2"></i>Finaliser le compte-rendu
+                                </button>
+                            </div>
+                        </div>
+                        
+                    {{ form_end(form) }}
+                </div>
+            </div>
+
+            {# Astuces #}
+            <div class="alert alert-info mt-4 border-0 shadow-sm">
+                <h6 class="alert-heading">
+                    <i class="bi bi-info-circle me-2"></i>Conseils pour un bon compte-rendu
+                </h6>
+                <ul class="mb-0 small">
+                    <li>Décrivez les activités réalisées pendant la visite</li>
+                    <li>Notez les points forts et les axes d'amélioration</li>
+                    <li>Mentionnez les objectifs pour la prochaine visite</li>
+                    <li>Ajoutez toute remarque pertinente sur la progression de l'étudiant</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
 </div>
 {% endblock %}

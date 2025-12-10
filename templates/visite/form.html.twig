@@ -1,19 +1,82 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div class="container mt-5">
-    <h2>{{ mode == 'edit' ? 'Modifier' : 'Ajouter' }} une visite pour {{ etudiant.prenom }} {{ etudiant.nom }}</h2>
+<div class="container my-5">
+    
+    {# Breadcrumb #}
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('app_dashboard') }}" class="text-decoration-none">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('etudiant_visites', {'id': etudiant.id}) }}" class="text-decoration-none">Visites de {{ etudiant.nom }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ mode == 'edit' ? 'Modifier' : 'Nouvelle visite' }}</li>
+        </ol>
+    </nav>
 
-    {{ form_start(
-        form,
-        mode == 'edit'
-            ? { action: path('visite_edit', { id: visite.id }) }
-            : { action: path('visite_add',  { id: etudiant.id }) }
-    ) }}
-        {% include 'partials/visite/_fields.html.twig' with { etudiant: etudiant } %}
-        <button type="submit" class="btn btn-primary mt-2">
-            {{ mode == 'edit' ? 'Mettre à jour' : 'Enregistrer' }}
-        </button>
-    {{ form_end(form) }}
+    {# En-tête #}
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="fw-bold mb-2">
+                <i class="bi bi-{{ mode == 'edit' ? 'pencil-square' : 'plus-circle' }} text-primary me-2"></i>
+                {{ mode == 'edit' ? 'Modifier la visite' : 'Nouvelle visite' }}
+            </h1>
+            <p class="text-muted">
+                <i class="bi bi-person me-1"></i>
+                Pour <strong>{{ etudiant.prenom }} {{ etudiant.nom }}</strong>
+            </p>
+        </div>
+    </div>
+
+    {# Formulaire dans une card #}
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">
+                        <i class="bi bi-calendar-event me-2"></i>
+                        Informations de la visite
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    {{ form_start(
+                        form,
+                        mode == 'edit'
+                            ? { action: path('visite_edit', { id: visite.id }) }
+                            : { action: path('visite_add',  { id: etudiant.id }) }
+                    ) }}
+                        
+                        {% include 'partials/visite/_fields.html.twig' with { etudiant: etudiant } %}
+                        
+                        <hr class="my-4">
+                        
+                        {# Boutons d'action #}
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{{ path('etudiant_visites', {'id': etudiant.id}) }}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>Annuler
+                            </a>
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-{{ mode == 'edit' ? 'check-circle' : 'save' }} me-2"></i>
+                                {{ mode == 'edit' ? 'Mettre à jour' : 'Enregistrer la visite' }}
+                            </button>
+                        </div>
+                        
+                    {{ form_end(form) }}
+                </div>
+            </div>
+
+            {# Info supplémentaire #}
+            {% if mode == 'edit' %}
+                <div class="alert alert-info mt-3 border-0 shadow-sm">
+                    <i class="bi bi-info-circle me-2"></i>
+                    <small>Dernière modification : {{ visite.updatedAt is defined ? visite.updatedAt|date('d/m/Y à H:i') : 'N/A' }}</small>
+                </div>
+            {% else %}
+                <div class="alert alert-light mt-3 border shadow-sm">
+                    <i class="bi bi-lightbulb text-warning me-2"></i>
+                    <small><strong>Astuce :</strong> Pensez à ajouter un commentaire détaillé pour faciliter le suivi de l'étudiant.</small>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
 </div>
 {% endblock %}

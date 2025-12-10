@@ -1,22 +1,76 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <h2 class="mb-4">{{ mode == 'edit' ? 'Modifier' : 'Ajouter' }} un étudiant</h2>
+<div class="container my-5">
+    
+    {# Breadcrumb #}
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('app_dashboard') }}" class="text-decoration-none">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ mode == 'edit' ? 'Modifier' : 'Nouvel' }} étudiant</li>
+        </ol>
+    </nav>
 
-            {{ form_start(form) }}
-
-                {# Inclure les champs via le partial #}
-                {% include 'partials/etudiant/_fields.html.twig' %}
-
-                <button type="submit" class="btn btn-primary mt-2">
-                    {{ mode == 'edit' ? 'Mettre à jour' : 'Enregistrer' }}
-                </button>
-
-            {{ form_end(form) }}
+    {# En-tête #}
+    <div class="row mb-4">
+        <div class="col text-center">
+            <h1 class="fw-bold mb-2">
+                <i class="bi bi-{{ mode == 'edit' ? 'pencil-square' : 'person-plus' }} text-primary me-2"></i>
+                {{ mode == 'edit' ? 'Modifier un étudiant' : 'Ajouter un étudiant' }}
+            </h1>
+            <p class="text-muted">
+                {{ mode == 'edit' ? 'Mettez à jour les informations de l\'étudiant' : 'Renseignez les informations du nouvel étudiant' }}
+            </p>
         </div>
     </div>
+
+    {# Formulaire #}
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-person-badge me-2"></i>
+                        Informations de l'étudiant
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    {{ form_start(form) }}
+
+                        {# Inclure les champs via le partial #}
+                        {% include 'partials/etudiant/_fields.html.twig' %}
+
+                        <hr class="my-4">
+
+                        {# Boutons d'action #}
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{{ path('app_dashboard') }}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>Annuler
+                            </a>
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-{{ mode == 'edit' ? 'check-circle' : 'save' }} me-2"></i>
+                                {{ mode == 'edit' ? 'Mettre à jour' : 'Enregistrer l\'étudiant' }}
+                            </button>
+                        </div>
+
+                    {{ form_end(form) }}
+                </div>
+            </div>
+
+            {# Message d'aide #}
+            {% if mode == 'edit' %}
+                <div class="alert alert-info mt-3 border-0 shadow-sm">
+                    <i class="bi bi-info-circle me-2"></i>
+                    <small>Les modifications seront appliquées immédiatement après validation.</small>
+                </div>
+            {% else %}
+                <div class="alert alert-light mt-3 border shadow-sm">
+                    <i class="bi bi-lightbulb text-warning me-2"></i>
+                    <small><strong>Astuce :</strong> Après l'ajout, vous pourrez directement planifier des visites pour cet étudiant.</small>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
 </div>
 {% endblock %}

@@ -1,108 +1,234 @@
-{# templates/dashboard/index.html.twig #}
 {% extends 'base.html.twig' %}
 
 {% block title %}Dashboard{% endblock %}
 
 {% block body %}
-<div class="container mt-2">
+<div class="container my-5">
 
-    {# Message Flash #}
+    {# Messages Flash #}
     {% for label, messages in app.flashes %}
         {% for message in messages %}
-            <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
-                {{ message }}
+            <div class="alert alert-{{ label }} alert-dismissible fade show shadow-sm" role="alert">
+                <i class="bi bi-check-circle me-2"></i>{{ message }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         {% endfor %}
     {% endfor %}
 
-    <h1 class="mb-4">Bienvenue {{ tuteur.prenom }} {{ tuteur.nom }}</h1>
-
-    <div class="mb-4">
-        <h3>Informations du tuteur</h3>
-        <ul class="list-group">
-            <li class="list-group-item"><strong>Email:</strong> {{ tuteur.email }}</li>
-            <li class="list-group-item"><strong>Téléphone:</strong> {{ tuteur.telephone ?: 'Non renseigné' }}</li>
-            <li class="list-group-item"><strong>Entreprise:</strong> {{ tuteur.entreprise ?: 'Non renseignée' }}</li>
-        </ul>
+    {# En-tête #}
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="fw-bold mb-2">
+                <i class="bi bi-speedometer2 text-primary me-2"></i>
+                Bienvenue {{ tuteur.prenom }} {{ tuteur.nom }}
+            </h1>
+            <p class="text-muted">Gérez vos étudiants et suivez vos visites</p>
+        </div>
+        <div class="col-auto">
+            <a href="{{ path('app_logout') }}" class="btn btn-outline-danger">
+                <i class="bi bi-box-arrow-right me-2"></i>Déconnexion
+            </a>
+        </div>
     </div>
 
-    <div class="mb-4">
-        <h3>Étudiants suivis</h3>
-        <a href="{{ path('student_add') }}" class="btn btn-primary mb-2">Ajouter un étudiant</a>
-        {% if etudiants is empty %}
-            <p>Aucun étudiant pour le moment.</p>
-        {% else %}
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Nom</th>
-                        <th>Prénom</th>
-                        <th>Formation</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for etudiant in etudiants %}
-                        <tr>
-                            <td>{{ etudiant.nom }}</td>
-                            <td>{{ etudiant.prenom ?: '-' }}</td>
-                            <td>{{ etudiant.formation ?: '-' }}</td>
-                            <td>
-                                <a href="{{ path('etudiant_visites', {id: etudiant.id}) }}" class="btn btn-sm btn-info">Voir visites</a>
-                                <a href="{{ path('visite_add', {id: etudiant.id}) }}" class="btn btn-sm btn-success">Ajouter visite</a>
-                                <a href="{{ path('student_edit', {id: etudiant.id}) }}" class="btn btn-sm btn-warning">Modifier</a>
-                                {# Formulaire suppression #}
-                                <form action="{{ path('student_delete', {'id': etudiant.id}) }}" method="post" style="display:inline;" onsubmit="return confirm('Voulez-vous vraiment supprimer cet étudiant ?');">
-                                    <input type="hidden" name="_method" value="DELETE">
-                                    <button class="btn btn-sm btn-danger" type="submit">Supprimer</button>
-                                </form>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% endif %}
+    {# Informations du tuteur #}
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">
+                <i class="bi bi-person-circle me-2"></i>Mes informations
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-envelope text-primary fs-4 me-3"></i>
+                        <div>
+                            <small class="text-muted d-block">Email</small>
+                            <span class="fw-semibold">{{ tuteur.email }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-telephone text-primary fs-4 me-3"></i>
+                        <div>
+                            <small class="text-muted d-block">Téléphone</small>
+                            <span class="fw-semibold">{{ tuteur.telephone ?: 'Non renseigné' }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-building text-primary fs-4 me-3"></i>
+                        <div>
+                            <small class="text-muted d-block">Entreprise</small>
+                            <span class="fw-semibold">{{ tuteur.entreprise ?: 'Non renseignée' }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="mb-4">
-        <h3>Prochaines visites</h3>
-        {% if prochainesVisites is empty %}
-            <p>Aucune visite planifiée.</p>
-        {% else %}
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Étudiant</th>
-                        <th>Commentaire</th>
-                        <th>Statut</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for visite in prochainesVisites %}
-                        <tr>
-                            <td>{{ visite.date|date('d/m/Y H:i') }}</td>
-                            <td>{{ visite.etudiant.nom }} {{ visite.etudiant.prenom ?: '' }}</td>
-                            <td>{{ visite.commentaire ?: '-' }}</td>
-                            <td>
-                                <form action="{{ path('visite_change_statut', {'id': visite.id}) }}" method="post">
-                                    <select name="statut" onchange="this.form.submit()" class="form-select form-select-sm">
-                                        {% for s in ['prevue', 'realisee', 'annulee'] %}
-                                            <option value="{{ s }}" {% if visite.statut == s %}selected{% endif %}>
-                                                {{ s|capitalize }}
-                                            </option>
-                                        {% endfor %}
-                                    </select>
-                                </form>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% endif %}
+    {# Étudiants suivis #}
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+                <i class="bi bi-people text-primary me-2"></i>
+                Étudiants suivis
+                <span class="badge bg-primary rounded-pill ms-2">{{ etudiants|length }}</span>
+            </h5>
+            <a href="{{ path('student_add') }}" class="btn btn-primary btn-sm">
+                <i class="bi bi-plus-circle me-1"></i>Ajouter un étudiant
+            </a>
+        </div>
+        <div class="card-body p-0">
+            {% if etudiants is empty %}
+                <div class="text-center py-5">
+                    <i class="bi bi-inbox fs-1 text-muted d-block mb-3"></i>
+                    <p class="text-muted mb-0">Aucun étudiant pour le moment.</p>
+                </div>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="px-4 py-3">Nom</th>
+                                <th class="py-3">Prénom</th>
+                                <th class="py-3">Formation</th>
+                                <th class="py-3 text-end pe-4">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for etudiant in etudiants %}
+                                <tr>
+                                    <td class="px-4 py-3">
+                                        <span class="fw-semibold">{{ etudiant.nom }}</span>
+                                    </td>
+                                    <td class="py-3">{{ etudiant.prenom ?: '-' }}</td>
+                                    <td class="py-3">
+                                        {% if etudiant.formation %}
+                                            <span class="badge bg-light text-dark border">{{ etudiant.formation }}</span>
+                                        {% else %}
+                                            <span class="text-muted">-</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="py-3 text-end pe-4">
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-outline-primary dropdown-toggle" 
+                                                    type="button" 
+                                                    id="dropdownActions{{ etudiant.id }}" 
+                                                    data-bs-toggle="dropdown" 
+                                                    aria-expanded="false">
+                                                <i class="bi bi-three-dots-vertical me-1"></i>Actions
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="dropdownActions{{ etudiant.id }}">
+                                                <li>
+                                                    <a class="dropdown-item" href="{{ path('etudiant_visites', {id: etudiant.id}) }}">
+                                                        <i class="bi bi-calendar-check text-info me-2"></i>Voir les visites
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="{{ path('visite_add', {id: etudiant.id}) }}">
+                                                        <i class="bi bi-plus-circle text-success me-2"></i>Ajouter une visite
+                                                    </a>
+                                                </li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li>
+                                                    <a class="dropdown-item" href="{{ path('student_edit', {id: etudiant.id}) }}">
+                                                        <i class="bi bi-pencil text-warning me-2"></i>Modifier
+                                                    </a>
+                                                </li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li>
+                                                    <form action="{{ path('student_delete', {'id': etudiant.id}) }}" 
+                                                          method="post" 
+                                                          onsubmit="return confirm('Voulez-vous vraiment supprimer cet étudiant ?');">
+                                                        <input type="hidden" name="_method" value="DELETE">
+                                                        <button class="dropdown-item text-danger" type="submit">
+                                                            <i class="bi bi-trash me-2"></i>Supprimer
+                                                        </button>
+                                                    </form>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        </div>
     </div>
 
-    <a href="{{ path('app_logout') }}" class="btn btn-danger">Déconnexion</a>
+    {# Prochaines visites #}
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white">
+            <h5 class="mb-0">
+                <i class="bi bi-calendar-event text-primary me-2"></i>
+                Prochaines visites
+                {% if prochainesVisites is not empty %}
+                    <span class="badge bg-warning text-dark rounded-pill ms-2">{{ prochainesVisites|length }}</span>
+                {% endif %}
+            </h5>
+        </div>
+        <div class="card-body p-0">
+            {% if prochainesVisites is empty %}
+                <div class="text-center py-5">
+                    <i class="bi bi-calendar-x fs-1 text-muted d-block mb-3"></i>
+                    <p class="text-muted mb-0">Aucune visite planifiée.</p>
+                </div>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="px-4 py-3">Date</th>
+                                <th class="py-3">Étudiant</th>
+                                <th class="py-3">Commentaire</th>
+                                <th class="py-3 text-center">Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for visite in prochainesVisites %}
+                                <tr>
+                                    <td class="px-4 py-3">
+                                        <i class="bi bi-calendar3 text-primary me-2"></i>
+                                        <span class="fw-semibold">{{ visite.date|date('d/m/Y') }}</span>
+                                        <small class="text-muted d-block ms-4">{{ visite.date|date('H:i') }}</small>
+                                    </td>
+                                    <td class="py-3">
+                                        <i class="bi bi-person me-1"></i>
+                                        {{ visite.etudiant.nom }} {{ visite.etudiant.prenom ?: '' }}
+                                    </td>
+                                    <td class="py-3">
+                                        {% if visite.commentaire %}
+                                            <small>{{ visite.commentaire }}</small>
+                                        {% else %}
+                                            <span class="text-muted">-</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="py-3 text-center">
+                                        <form action="{{ path('visite_change_statut', {'id': visite.id}) }}" method="post">
+                                            <select name="statut" onchange="this.form.submit()" class="form-select form-select-sm w-auto d-inline-block">
+                                                {% for s in ['prevue', 'realisee', 'annulee'] %}
+                                                    <option value="{{ s }}" {% if visite.statut == s %}selected{% endif %}>
+                                                        {{ s|capitalize }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
 </div>
 {% endblock %}

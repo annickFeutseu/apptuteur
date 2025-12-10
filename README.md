@@ -36,7 +36,8 @@ cp .env.example .env
 ```
 
 Modifier .env si nécessaire pour la configuration Docker/MySQL.
-
+Creer une Bd et specifier le nom de la bd dans le .env
+Pour acceder à la BD: http://localhost:8081/
 
 3. **Lancer les conteneurs Docker :**
 ```bash
