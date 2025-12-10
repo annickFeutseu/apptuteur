@@ -1,0 +1,118 @@
+<footer class="bg-dark text-white mt-5">
+    <div class="container py-5">
+        <div class="row g-4">
+            <!-- Colonne 1 - À propos -->
+            <div class="col-lg-4 col-md-6">
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-mortarboard-fill me-2"></i>AppTuteur
+                </h5>
+                <p class="text-white-50">
+                    La plateforme qui connecte étudiants et tuteurs pour un apprentissage collaboratif et efficace.
+                </p>
+                <div class="d-flex gap-3 mt-3">
+                    <a href="#" class="text-white-50 fs-5">
+                        <i class="bi bi-facebook"></i>
+                    </a>
+                    <a href="#" class="text-white-50 fs-5">
+                        <i class="bi bi-twitter"></i>
+                    </a>
+                    <a href="#" class="text-white-50 fs-5">
+                        <i class="bi bi-instagram"></i>
+                    </a>
+                    <a href="#" class="text-white-50 fs-5">
+                        <i class="bi bi-linkedin"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Colonne 2 - Liens rapides -->
+            <div class="col-lg-2 col-md-6">
+                <h6 class="fw-bold mb-3">Liens rapides</h6>
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <a href="{{ path('list_tuteurs_route') }}" class="text-white-50 text-decoration-none">
+                            <i class="bi bi-chevron-right small"></i> Tuteurs
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="#" class="text-white-50 text-decoration-none">
+                            <i class="bi bi-chevron-right small"></i> Étudiants
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="{{ path('app_sujets') }}" class="text-white-50 text-decoration-none">
+                            <i class="bi bi-chevron-right small"></i> Sujets
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="#" class="text-white-50 text-decoration-none">
+                            <i class="bi bi-chevron-right small"></i> À propos
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Colonne 3 - Support -->
+            <div class="col-lg-3 col-md-6">
+                <h6 class="fw-bold mb-3">Support</h6>
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <a href="#" class="text-white-50 text-decoration-none">
+                            <i class="bi bi-chevron-right small"></i> Centre d'aide
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="#" class="text-white-50 text-decoration-none">
+                            <i class="bi bi-chevron-right small"></i> Contactez-nous
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="#" class="text-white-50 text-decoration-none">
+                            <i class="bi bi-chevron-right small"></i> FAQ
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="#" class="text-white-50 text-decoration-none">
+                            <i class="bi bi-chevron-right small"></i> Confidentialité
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Colonne 4 - Contact -->
+            <div class="col-lg-3 col-md-6">
+                <h6 class="fw-bold mb-3">Contact</h6>
+                <ul class="list-unstyled text-white-50">
+                    <li class="mb-2">
+                        <i class="bi bi-geo-alt me-2"></i>
+                        123 Rue de l'Éducation, Paris
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-envelope me-2"></i>
+                        contact@apptuteur.fr
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-telephone me-2"></i>
+                        +33 1 23 45 67 89
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Ligne de séparation -->
+        <hr class="my-4 border-secondary">
+
+        <!-- Copyright -->
+        <div class="row">
+            <div class="col-md-6 text-center text-md-start">
+                <p class="text-white-50 mb-0 small">
+                    © {{ "now"|date("Y") }} AppTuteur. Tous droits réservés.
+                </p>
+            </div>
+            <div class="col-md-6 text-center text-md-end">
+                <a href="#" class="text-white-50 text-decoration-none small me-3">Conditions d'utilisation</a>
+                <a href="#" class="text-white-50 text-decoration-none small">Politique de confidentialité</a>
+            </div>
+        </div>
+    </div>
+</footer>

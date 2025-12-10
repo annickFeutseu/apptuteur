@@ -37,6 +37,7 @@ cp .env.example .env
 
 Modifier .env si nécessaire pour la configuration Docker/MySQL.
 
+
 3. **Lancer les conteneurs Docker :**
 ```bash
 docker compose up -d
@@ -57,6 +58,14 @@ docker compose exec php php bin/console doctrine:migrations:migrate
 ```bash
 Ouvrir dans le navigateur : http://localhost:8000
 ```
+Comme specifie dans le tp, vous pouvez creer ce compte en utilisant les api(swagger: localhost:8000/api):
+{ 
+    "nom": "Durand", 
+    "prenom": "Alice", 
+    "email": "alice.durand@example.com", 
+    "telephone": "0601020304" 
+}
+Connectez vous avec cet email.
 
 7. **Connexion :**
 ```bash
