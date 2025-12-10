@@ -62,3 +62,24 @@ app_sujets:
     path: /sujets
     controller: App\Controller\TuteurController::sujets
     methods: [GET]
+
+# for auth
+app_login:
+    path: /login
+    controller: App\Controller\AuthController::login
+    methods: [GET, POST]
+
+# app_register:
+#     path: /register
+#     controller: App\Controller\AuthController::register
+#     methods: [GET, POST]
+
+app_logout:
+    path: /logout
+    controller: App\Controller\AuthController::logout
+    methods: [GET]
+
+app_dashboard:
+    path: /dashboard
+    controller: App\Controller\DashboardController::index
+    methods: [GET]

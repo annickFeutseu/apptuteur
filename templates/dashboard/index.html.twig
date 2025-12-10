@@ -1,0 +1,93 @@
+{# templates/dashboard/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+
+    {# Message Flash #}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <h1 class="mb-4">Bienvenue {{ tuteur.prenom }} {{ tuteur.name }}</h1>
+
+    <div class="mb-4">
+        <h3>Informations du tuteur</h3>
+        <ul class="list-group">
+            <li class="list-group-item"><strong>Email:</strong> {{ tuteur.email }}</li>
+            <li class="list-group-item"><strong>Téléphone:</strong> {{ tuteur.telephone ?: 'Non renseigné' }}</li>
+            <li class="list-group-item"><strong>Entreprise:</strong> {{ tuteur.entreprise ?: 'Non renseignée' }}</li>
+        </ul>
+    </div>
+
+    <div class="mb-4">
+        <h3>Étudiants suivis</h3>
+        <a href="#" class="btn btn-primary mb-2">Ajouter un étudiant</a>
+        {% if etudiants is empty %}
+            <p>Aucun étudiant pour le moment.</p>
+        {% else %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Formation</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for etudiant in etudiants %}
+                        <tr>
+                            <td>{{ etudiant.nom }}</td>
+                            <td>{{ etudiant.prenom ?: '-' }}</td>
+                            <td>{{ etudiant.formation ?: '-' }}</td>
+                            <td>
+                                <a href="{{ path('etudiant_visites', {id: etudiant.id}) }}" class="btn btn-sm btn-info">Voir visites</a>
+                                <a href="{{ path('visite_new', {id: etudiant.id}) }}" class="btn btn-sm btn-success">Ajouter visite</a>
+                                <a href="{{ path('etudiant_edit', {id: etudiant.id}) }}" class="btn btn-sm btn-warning">Modifier</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+
+    <div class="mb-4">
+        <h3>Prochaines visites</h3>
+        {% if prochainesVisites is empty %}
+            <p>Aucune visite planifiée.</p>
+        {% else %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Étudiant</th>
+                        <th>Commentaire</th>
+                        <th>Statut</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for visite in prochainesVisites %}
+                        <tr>
+                            <td>{{ visite.date|date('d/m/Y H:i') }}</td>
+                            <td>{{ visite.etudiant.nom }} {{ visite.etudiant.prenom ?: '' }}</td>
+                            <td>{{ visite.commentaire ?: '-' }}</td>
+                            <td>{{ visite.statut }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+
+    <a href="{{ path('app_logout') }}" class="btn btn-danger">Déconnexion</a>
+</div>
+{% endblock %}

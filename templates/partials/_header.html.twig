@@ -1,0 +1,27 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+    <div class="container-fluid p-4">
+        <!-- Logo à gauche -->
+        <a class="navbar-brand" href="/">AppTuteur</a>
+
+        <!-- Bouton pour menu mobile -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu"
+                aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Menu à droite -->
+        <div class="collapse navbar-collapse" id="navbarMenu">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="{{ path('list_tuteurs_route') }}">Tuteurs</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Étudiants</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('app_sujets') }}">Sujets</a></li>
+                {% if app.session.get('tuteur_id') %}
+                    <li class="nav-item"><a class="nav-link" href="{{ path('app_dashboard') }}">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link text-danger" href="{{ path('app_logout') }}">Déconnexion</a></li>
+                {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{{ path('app_login') }}">Connexion</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>

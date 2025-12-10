@@ -12,6 +12,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: TuteurRepository::class)]
 #[ApiResource]
+#[UniqueEntity(fields: ['email'], message: "Cet email est déjà utilisé.")]
 class Tuteur
 {
     #[ORM\Id]
@@ -33,7 +34,6 @@ class Tuteur
     private ?string $entreprise = null;
 
     #[ORM\Column(length: 255, unique: true)]
-    #[UniqueEntity(fields: ["email"], message: "Cet email est déjà utilisé.")]
     #[Assert\NotBlank(message: "L'email est obligatoire.")]
     #[Assert\Email(message: "Format d'email invalide.")]
     private ?string $email = null;
