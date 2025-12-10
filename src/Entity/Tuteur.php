@@ -7,6 +7,8 @@ use App\Repository\TuteurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: TuteurRepository::class)]
 #[ApiResource]
@@ -17,19 +19,31 @@ class Tuteur
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 255, nullable: false)]
+    #[Assert\NotBlank(message: "Le nom est obligatoire.")]
+    #[Assert\Length(min: 2, max: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 255, nullable: false)]
+    #[Assert\NotBlank(message: "Le prenom est obligatoire.")]
+    #[Assert\Length(min: 2, max: 255)]
     private ?string $prenom = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $entreprise = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
+    #[UniqueEntity(fields: ["email"], message: "Cet email est déjà utilisé.")]
+    #[Assert\NotBlank(message: "L'email est obligatoire.")]
+    #[Assert\Email(message: "Format d'email invalide.")]
     private ?string $email = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Regex(
+        pattern: "/^(\+33|0)[1-9](\d{2}){4}$/",
+        message: "Numéro de téléphone invalide."
+    )]
+
     private ?string $telephone = null;
 
     /**
@@ -38,9 +52,16 @@ class Tuteur
     #[ORM\OneToMany(targetEntity: Etudiant::class, mappedBy: 'tuteur')]
     private Collection $etudiants;
 
+    /**
+     * @var Collection<int, Visite>
+     */
+    #[ORM\OneToMany(targetEntity: Visite::class, mappedBy: 'tuteur')]
+    private Collection $visites;
+
     public function __construct()
     {
         $this->etudiants = new ArrayCollection();
+        $this->visites = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -132,6 +153,36 @@ class Tuteur
             // set the owning side to null (unless already changed)
             if ($etudiant->getTuteur() === $this) {
                 $etudiant->setTuteur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Visite>
+     */
+    public function getVisites(): Collection
+    {
+        return $this->visites;
+    }
+
+    public function addVisite(Visite $visite): static
+    {
+        if (!$this->visites->contains($visite)) {
+            $this->visites->add($visite);
+            $visite->setTuteur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVisite(Visite $visite): static
+    {
+        if ($this->visites->removeElement($visite)) {
+            // set the owning side to null (unless already changed)
+            if($visite->getTuteur() === $this) {
+                $visite->setTuteur(null);
             }
         }
 
